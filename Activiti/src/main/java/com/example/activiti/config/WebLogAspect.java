@@ -1,4 +1,4 @@
-package com.example.system.config;
+package com.example.activiti.config;
 
 import eu.bitwalker.useragentutils.UserAgent;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,7 @@ public class WebLogAspect {
      * web日志切入点
      * 定义请求日志切入点，其切入点表达式有多种匹配方式,这里是指定路径
      */
-    @Pointcut("execution(public * com.example.system.controller.*.*(..))")
+    @Pointcut("execution(public * com.example.activiti.controller.*.*(..))")
     public void webLogPointcut() {
     }
 

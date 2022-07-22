@@ -1,4 +1,4 @@
-package com.example.system.config;
+package com.example.activiti.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -47,7 +47,7 @@ public class Swagger2Config {
                 // 指定生成的文档中的封面信息；文档标题、版本、作者
                 .apiInfo(apiInfo)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.example.system.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.example.activiti.controller"))
                 .paths(PathSelectors.any())
                 .build();
 

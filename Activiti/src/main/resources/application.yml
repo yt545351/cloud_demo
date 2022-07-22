@@ -1,0 +1,24 @@
+server:
+  port: 8083
+spring:
+  application:
+    name: Activiti
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/activiti?useSSL=false&serverTimezone=UTC
+    username: root
+    password: 123456
+  activiti:
+    database-schema-update: true
+    # 设置历史数据级别，默认为none，不会有历史数据
+    history-level: audit
+    # 是否创建历史数据相关表，默认为false
+    db-history-used: true
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8000/eureka/
