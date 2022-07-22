@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.system.mapper.RoleInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.system.entity.RoleInfo">
+        <id column="id" property="id" />
+        <result column="role_id" property="role_id" />
+        <result column="role_name" property="role_name" />
+        <result column="menu_json" property="menu_json" />
+        <result column="remark" property="remark" />
+        <result column="create_time" property="create_time" />
+        <result column="update_time" property="update_time" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, role_id, role_name, menu_json, remark, create_time, update_time
+    </sql>
+
+</mapper>

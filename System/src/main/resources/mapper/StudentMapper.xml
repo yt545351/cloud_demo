@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.system.mapper.StudentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.system.entity.Student">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="age" property="age" />
+        <result column="sex" property="sex" />
+        <result column="address" property="address" />
+        <result column="tell" property="tell" />
+        <result column="grade" property="grade" />
+        <result column="class_name" property="class_name" />
+        <result column="class_teacher_name" property="class_teacher_name" />
+        <result column="class_teacher_tell" property="class_teacher_tell" />
+        <result column="fa_name" property="fa_name" />
+        <result column="fa_tell" property="fa_tell" />
+        <result column="mo_name" property="mo_name" />
+        <result column="mo_tell" property="mo_tell" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, age, sex, address, tell, grade, class_name, class_teacher_name, class_teacher_tell, fa_name, fa_tell, mo_name, mo_tell
+    </sql>
+    <select id="queryClassTeacherName" resultType="java.util.Map">
+        select class_teacher_name from student where name = #{queryVo.name}
+    </select>
+
+</mapper>
