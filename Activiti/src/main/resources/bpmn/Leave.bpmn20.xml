@@ -9,15 +9,16 @@
     <sequenceFlow id="sid-8c1c9364-44c2-4c44-a808-a5a74211cd0c" sourceRef="sid-9fb66115-783f-4a40-ad73-dde3eff9564f" targetRef="sid-586e1d55-1980-4ae7-a264-02e97b34aed9"/>
     <exclusiveGateway id="sid-9dfe0e89-3efd-4126-b34a-e47121330713"/>
     <sequenceFlow id="sid-91f02d69-c484-4970-8e41-1123385091e8" sourceRef="sid-9dfe0e89-3efd-4126-b34a-e47121330713" targetRef="sid-04533460-7b2b-4e53-945c-28a528e23df2" name="大于3天">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[leaveDays>3]]></conditionExpression>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${leaveDays>3}]]></conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="sid-49126597-3a58-4ced-a3a4-e051208f2685" sourceRef="sid-9dfe0e89-3efd-4126-b34a-e47121330713" targetRef="sid-795ee36c-290d-453c-afb4-16fcfac43fc9" name="小于等于3天">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[leaveDays<=3]]></conditionExpression>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${leaveDays<=3}]]></conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="sid-422f3a73-45ba-40af-9087-dc921ec08d31" sourceRef="sid-586e1d55-1980-4ae7-a264-02e97b34aed9" targetRef="sid-9dfe0e89-3efd-4126-b34a-e47121330713"/>
     <sequenceFlow id="sid-aaf582f9-b14f-4c13-99fd-7c5d99188bcb" sourceRef="sid-dda750e3-2ce0-4d16-a3d1-0ab522ba321e" targetRef="sid-9fb66115-783f-4a40-ad73-dde3eff9564f"/>
     <endEvent id="sid-084b7103-05c9-4628-b85a-74cfa4f79af6"/>
     <sequenceFlow id="sid-929a3791-d93f-48ea-843e-a2238113643a" sourceRef="sid-795ee36c-290d-453c-afb4-16fcfac43fc9" targetRef="sid-084b7103-05c9-4628-b85a-74cfa4f79af6"/>
+    <sequenceFlow id="sid-a8893913-34e9-45b9-9992-7d2dc0489c1f" sourceRef="sid-04533460-7b2b-4e53-945c-28a528e23df2" targetRef="sid-795ee36c-290d-453c-afb4-16fcfac43fc9"/>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_Leave">
     <bpmndi:BPMNPlane bpmnElement="Leave" id="BPMNPlane_Leave">
@@ -68,6 +69,10 @@
         <omgdi:waypoint x="584.10284" y="146.0557"/>
         <omgdi:waypoint x="664.99994" y="146.0557"/>
         <omgdi:waypoint x="665.0" y="65.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge-34841d78-257a-4aa6-995b-f352d7f15fd8" bpmnElement="sid-a8893913-34e9-45b9-9992-7d2dc0489c1f">
+        <omgdi:waypoint x="534.1028" y="-7.640312"/>
+        <omgdi:waypoint x="534.10284" y="106.055695"/>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
