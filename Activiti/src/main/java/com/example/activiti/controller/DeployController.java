@@ -1,5 +1,6 @@
 package com.example.activiti.controller;
 
+import com.example.activiti.vo.PageBean;
 import com.example.activiti.vo.ProcessVO;
 import com.example.activiti.vo.ResultBody;
 import io.swagger.annotations.Api;
@@ -207,83 +208,5 @@ public class DeployController {
         bpmnOut.close();
     }
 
-    @ApiOperation(value = "历史任务列表")
-    @RequestMapping(value = "/historyProcessList", method = RequestMethod.POST)
-    public Object historyProcessList(@RequestBody ProcessVO processVO) {
-        List<Map<String, Object>> result = new ArrayList<>();
-        List<HistoricProcessInstance> hpiList = historyService.createHistoricProcessInstanceQuery().list();
-        for (HistoricProcessInstance hpi : hpiList) {
-            List<HistoricVariableInstance> hviList = historyService.createHistoricVariableInstanceQuery()
-                    .processInstanceId(hpi.getId())
-                    .list();
-            for (HistoricVariableInstance hvi : hviList) {
-                if (hvi.getValue().equals(processVO.getAssignee())) {
-                    Map<String, Object> map = new HashMap<>();
 
-                    map.put("id", hpi.getId());
-                    log.info("id:{}", hpi.getId());
-
-                    map.put("businessKey", hpi.getBusinessKey());
-                    log.info("BusinessKey:{}", hpi.getBusinessKey());
-
-                    map.put("processDefinitionId", hpi.getProcessDefinitionId());
-                    log.info("ProcessDefinitionId:{}", hpi.getProcessDefinitionId());
-
-                    map.put("processDefinitionName", hpi.getProcessDefinitionName());
-                    log.info("ProcessDefinitionName:{}", hpi.getProcessDefinitionName());
-
-                    map.put("processDefinitionKey", hpi.getProcessDefinitionKey());
-                    log.info("ProcessDefinitionKey:{}", hpi.getProcessDefinitionKey());
-
-                    map.put("processDefinitionVersion", hpi.getProcessDefinitionVersion());
-                    log.info("ProcessDefinitionVersion:{}", hpi.getProcessDefinitionVersion());
-
-                    map.put("deploymentId", hpi.getDeploymentId());
-                    log.info("DeploymentId:{}", hpi.getDeploymentId());
-
-                    map.put("startTime", hpi.getStartTime());
-                    log.info("StartTime:{}", hpi.getStartTime());
-
-                    map.put("endTime", hpi.getEndTime());
-                    log.info("EndTime:{}", hpi.getEndTime());
-
-                    map.put("durationInMillis", hpi.getDurationInMillis());
-                    log.info("DurationInMillis:{}", hpi.getDurationInMillis());
-
-                    map.put("endActivityId", hpi.getEndActivityId());
-                    log.info("EndActivityId:{}", hpi.getEndActivityId());
-
-                    map.put("startUserId", hpi.getStartUserId());
-                    log.info("StartUserId:{}", hpi.getStartUserId());
-
-                    map.put("startActivityId", hpi.getStartActivityId());
-                    log.info("StartActivityId:{}", hpi.getStartActivityId());
-
-                    map.put("deleteReason", hpi.getDeleteReason());
-                    log.info("DeleteReason:{}", hpi.getDeleteReason());
-
-                    map.put("superProcessInstanceId", hpi.getSuperProcessInstanceId());
-                    log.info("SuperProcessInstanceId:{}", hpi.getSuperProcessInstanceId());
-
-                    map.put("tenantId", hpi.getTenantId());
-                    log.info("TenantId:{}", hpi.getTenantId());
-
-                    map.put("name", hpi.getName());
-                    log.info("Name:{}", hpi.getName());
-
-                    map.put("description", hpi.getDescription());
-                    log.info("Description:{}", hpi.getDescription());
-
-                    map.put("processVariables", hpi.getProcessVariables());
-                    log.info("ProcessVariables:{}", hpi.getProcessVariables());
-
-                    map.put("assignee", hvi.getValue());
-
-                    result.add(map);
-                }
-            }
-
-        }
-        return new ResultBody<>(result);
-    }
 }

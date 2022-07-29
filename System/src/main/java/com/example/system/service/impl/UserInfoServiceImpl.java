@@ -121,6 +121,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Override
     public Object getUserInfoList(QueryUserInfoVO queryVO) {
         List<UserInfo> list = userInfoMapper.selectList(new QueryWrapper<UserInfo>()
+                .select("id,create_time,role_id,tell,update_time,username")
                 .eq(StringUtils.isNotEmpty(queryVO.getUsername()), "username", queryVO.getUsername())
                 .eq(StringUtils.isNotEmpty(queryVO.getRole_id()), "role_id", queryVO.getRole_id())
                 .orderByDesc("create_time"));
@@ -134,7 +135,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         UserInfo user = userInfoMapper.selectOne(new QueryWrapper<UserInfo>()
                 .eq("username", queryVO.getUsername()));
         RoleInfo roleInfo = roleInfoMapper.selectOne(new QueryWrapper<RoleInfo>()
-                .select("menu_json")
+                .select("role_name,menu_json")
                 .eq("role_id", user.getRole_id()));
         return roleInfo;
     }

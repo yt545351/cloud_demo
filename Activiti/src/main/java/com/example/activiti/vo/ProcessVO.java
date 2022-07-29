@@ -11,7 +11,7 @@ import java.util.Map;
  * @date 2022/07/22
  */
 @Data
-public class ProcessVO {
+public class ProcessVO extends Page{
     /**
      * 流程部署id
      */
