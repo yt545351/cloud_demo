@@ -66,4 +66,9 @@ public class ProcessVO extends Page{
      * 评论id
      */
     private String commentId;
+
+    /**
+     * 是否成功
+     */
+    private String isSucceed;
 }

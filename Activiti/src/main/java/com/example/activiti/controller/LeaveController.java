@@ -18,6 +18,7 @@ import org.activiti.engine.history.HistoricVariableInstance;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.repository.ProcessDefinitionQuery;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -136,6 +137,58 @@ public class LeaveController {
         return new ResultBody<>(result);
     }
 
+    /**
+     * 查询流程任务列表
+     * 查询某一次流程的执行一共经历了多少个任务
+     *
+     * @param processVO 流程入参
+     */
+    @ApiOperation(value = "查询流程任务列表")
+    @RequestMapping(value = "/queryProcessTaskList", method = RequestMethod.POST)
+    public Object queryProcessTaskList(@RequestBody ProcessVO processVO) {
+        List<Map<String, Object>> result = new ArrayList<>();
+        List<HistoricActivityInstance> haiList = historyService.createHistoricActivityInstanceQuery().processInstanceId(processVO.getInstanceId()).orderByHistoricActivityInstanceStartTime().asc().list();
+        List<Comment> commentList = taskService.getProcessInstanceComments(processVO.getInstanceId());
+        Map<String, String> commentIdMap = new HashMap<>();
+        for (Comment comment : commentList) {
+            commentIdMap.put(comment.getTaskId(), comment.getId());
+        }
+
+        for (HistoricActivityInstance hai : haiList) {
+            Map<String, Object> map = new HashMap<>();
+
+            map.put("id", hai.getId());
+            map.put("activityId", hai.getActivityId());
+            map.put("activityName", hai.getActivityName());
+            map.put("activityType", hai.getActivityType());
+            map.put("processDefinitionId", hai.getProcessDefinitionId());
+            map.put("processInstanceId", hai.getProcessInstanceId());
+            map.put("executionId", hai.getExecutionId());
+            map.put("taskId", hai.getTaskId());
+            map.put("calledProcessInstanceId", hai.getCalledProcessInstanceId());
+            map.put("assignee", hai.getAssignee());
+            map.put("startTime", hai.getStartTime());
+            map.put("endTime", hai.getEndTime());
+            map.put("durationInMillis", hai.getDurationInMillis());
+            map.put("deleteReason", hai.getDeleteReason());
+            map.put("tenantId", hai.getTenantId());
+            map.put("time", hai.getTime());
+
+            if (commentIdMap.containsKey(hai.getTaskId())) {
+                String commentId = commentIdMap.get(hai.getTaskId());
+                Comment comment = taskService.getComment(commentId);
+                String message = comment.getFullMessage();
+                map.put("comment", message);
+            }
+            if ("startEvent".equals(hai.getActivityType())) {
+                result.add(0, map);
+            } else {
+                result.add(map);
+            }
+        }
+        return new ResultBody<>(result);
+    }
+
     @ApiOperation(value = "启动流程,并填写申请")
     @RequestMapping(value = "/startProcess", method = RequestMethod.POST)
     public Object startProcess(@RequestBody ProcessVO processVO) {
@@ -153,19 +206,19 @@ public class LeaveController {
         try {
             //启动流程，添加责任人变量
             ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processVO.getProcessKey(), assigneeMap);
+            Thread.sleep(1000);
             //获取下一个任务ID
             HistoricActivityInstance hai = historyService.createHistoricActivityInstanceQuery().processInstanceId(processInstance.getId()).orderByHistoricActivityInstanceStartTime().desc().list().get(0);
             String taskId = hai.getTaskId();
             //获取任务
             Task task = taskService.createTaskQuery().processDefinitionKey(processKey).taskId(taskId).taskAssignee(assignee).singleResult();
-
             //添加备注 addComment(taskId,processInstanceId,message)
             taskService.addComment(task.getId(), task.getProcessInstanceId(), comment);
             //完成任务
             taskService.complete(task.getId(), variables);
-
         } catch (Exception e) {
             log.info("启动流程失败");
+            e.printStackTrace();
             return new ResultBody<>(ResultUtils.resultMap(false, "申请失败,请联系管理员"));
         }
         log.info("启动流程,并填写申请成功");
@@ -229,6 +282,7 @@ public class LeaveController {
             taskService.claim(processVO.getTaskId(), processVO.getCandidateUser());
             log.info("候选人：{}-已认领任务：{}", processVO.getCandidateUser(), processVO.getTaskId());
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResultBody<>(ResultUtils.resultMap(true, "认领申请失败"));
         }
         return new ResultBody<>(ResultUtils.resultMap(true, "认领申请成功"));
@@ -286,14 +340,18 @@ public class LeaveController {
     @ApiOperation(value = "完成任务")
     @RequestMapping(value = "/completeTask", method = RequestMethod.POST)
     public Object completeTask(@RequestBody ProcessVO processVO) {
+        boolean isSucceed = processVO.getIsSucceed().equals("1") ? true : false;
+        Map<String, Object> map = new HashMap<>();
+        map.put("isSucceed", isSucceed);
         try {
             Task task = taskService.createTaskQuery()
                     .taskId(processVO.getTaskId())
                     .taskAssignee(processVO.getAssignee())
                     .singleResult();
             taskService.addComment(task.getId(), task.getProcessInstanceId(), processVO.getComment());
-            taskService.complete(processVO.getTaskId());
+            taskService.complete(processVO.getTaskId(), map);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResultBody<>(ResultUtils.resultMap(false, "提交失败，请联系系统管理员"));
         }
         return new ResultBody<>(ResultUtils.resultMap(true, "提交成功"));

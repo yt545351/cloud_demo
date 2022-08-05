@@ -23,15 +23,23 @@ public class DateUtil {
     static final String DTF = "yyyy-MM-dd HH:mm:ss";
 
     public static void main(String[] args) {
-        stringToString1();
-        stringToString2();
-        localDateTimeToString();
-        getYearMonthWeekDay();
-        getFiveMinBefore();
-        localDateTimeToWholeTime();
-        getNowBefore12FiveMin();
-        getEveryMonthFirstDayAndLastDay();
-        stringToLocalDateTime();
+//        stringToString1();
+//        stringToString2();
+//        localDateTimeToString();
+//        getYearMonthWeekDay();
+//        getFiveMinBefore();
+//        localDateTimeToWholeTime();
+//        getNowBefore12FiveMin();
+//        getEveryMonthFirstDayAndLastDay();
+//        stringToLocalDateTime();
+        getTime();
+
+    }
+    public static void getTime(){
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        String format = dateTimeFormatter.format(now);
+        System.out.println(format);
     }
 
     /**
