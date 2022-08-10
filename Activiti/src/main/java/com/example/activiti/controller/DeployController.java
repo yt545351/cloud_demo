@@ -52,11 +52,14 @@ public class DeployController {
 
     @ApiOperation(value = "部署流程")
     @RequestMapping(value = "/deployProcess", method = RequestMethod.POST)
-    public void deployProcess() {
+    public void deployProcess(@RequestBody ProcessVO processVO) {
+        String processKey = processVO.getProcessKey();
+        String bpmnName = processKey + ".bpmn20.xml";
+        String pngName = processKey + ".png";
         Deployment deployment = repositoryService.createDeployment()
-                .addClasspathResource("bpmn/Leave.bpmn20.xml")
-                .addClasspathResource("bpmn/Leave.png")
-                .name("请假流程")
+                .addClasspathResource("bpmn/" + bpmnName)
+                .addClasspathResource("bpmn/" + pngName)
+                .name("出差流程")
                 .deploy();
         log.info("流程ID:{}", deployment.getId());
         log.info("流程Name:{}", deployment.getName());

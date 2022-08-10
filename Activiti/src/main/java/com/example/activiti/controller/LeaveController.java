@@ -58,9 +58,9 @@ public class LeaveController {
         List<Map<String, Object>> resultList = new ArrayList<>();
         List<HistoricProcessInstance> hpiList = new ArrayList<>();
         if (StringUtils.isNotEmpty(processVO.getProcessKey())) {
-            hpiList = historyService.createHistoricProcessInstanceQuery().processDefinitionKey(processVO.getProcessKey()).list();
+            hpiList = historyService.createHistoricProcessInstanceQuery().processDefinitionKey(processVO.getProcessKey()).orderByProcessInstanceStartTime().desc().list();
         } else {
-            hpiList = historyService.createHistoricProcessInstanceQuery().list();
+            hpiList = historyService.createHistoricProcessInstanceQuery().orderByProcessInstanceStartTime().desc().list();
 
         }
         for (HistoricProcessInstance hpi : hpiList) {
@@ -68,64 +68,25 @@ public class LeaveController {
             for (HistoricVariableInstance hvi : hviList) {
                 if (hvi.getValue().equals(processVO.getAssignee())) {
                     Map<String, Object> map = new HashMap<>();
-
                     map.put("id", hpi.getId());
-                    log.info("id:{}", hpi.getId());
-
                     map.put("businessKey", hpi.getBusinessKey());
-                    log.info("BusinessKey:{}", hpi.getBusinessKey());
-
                     map.put("processDefinitionId", hpi.getProcessDefinitionId());
-                    log.info("ProcessDefinitionId:{}", hpi.getProcessDefinitionId());
-
                     map.put("processDefinitionName", hpi.getProcessDefinitionName());
-                    log.info("ProcessDefinitionName:{}", hpi.getProcessDefinitionName());
-
                     map.put("processDefinitionKey", hpi.getProcessDefinitionKey());
-                    log.info("ProcessDefinitionKey:{}", hpi.getProcessDefinitionKey());
-
                     map.put("processDefinitionVersion", hpi.getProcessDefinitionVersion());
-                    log.info("ProcessDefinitionVersion:{}", hpi.getProcessDefinitionVersion());
-
                     map.put("deploymentId", hpi.getDeploymentId());
-                    log.info("DeploymentId:{}", hpi.getDeploymentId());
-
                     map.put("startTime", hpi.getStartTime());
-                    log.info("StartTime:{}", hpi.getStartTime());
-
                     map.put("endTime", hpi.getEndTime());
-                    log.info("EndTime:{}", hpi.getEndTime());
-
                     map.put("durationInMillis", hpi.getDurationInMillis());
-                    log.info("DurationInMillis:{}", hpi.getDurationInMillis());
-
                     map.put("endActivityId", hpi.getEndActivityId());
-                    log.info("EndActivityId:{}", hpi.getEndActivityId());
-
                     map.put("startUserId", hpi.getStartUserId());
-                    log.info("StartUserId:{}", hpi.getStartUserId());
-
                     map.put("startActivityId", hpi.getStartActivityId());
-                    log.info("StartActivityId:{}", hpi.getStartActivityId());
-
                     map.put("deleteReason", hpi.getDeleteReason());
-                    log.info("DeleteReason:{}", hpi.getDeleteReason());
-
                     map.put("superProcessInstanceId", hpi.getSuperProcessInstanceId());
-                    log.info("SuperProcessInstanceId:{}", hpi.getSuperProcessInstanceId());
-
                     map.put("tenantId", hpi.getTenantId());
-                    log.info("TenantId:{}", hpi.getTenantId());
-
                     map.put("name", hpi.getName());
-                    log.info("Name:{}", hpi.getName());
-
                     map.put("description", hpi.getDescription());
-                    log.info("Description:{}", hpi.getDescription());
-
                     map.put("processVariables", hpi.getProcessVariables());
-                    log.info("ProcessVariables:{}", hpi.getProcessVariables());
-
                     map.put("assignee", hvi.getValue());
 
                     resultList.add(map);
@@ -207,12 +168,17 @@ public class LeaveController {
             //启动流程，添加责任人变量
             ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processVO.getProcessKey(), assigneeMap);
             Thread.sleep(1000);
-            //获取下一个任务ID
-            HistoricActivityInstance hai = historyService.createHistoricActivityInstanceQuery().processInstanceId(processInstance.getId()).orderByHistoricActivityInstanceStartTime().desc().list().get(0);
-            String taskId = hai.getTaskId();
+            //获取历史任务列表
+            List<HistoricActivityInstance> haiList = historyService.createHistoricActivityInstanceQuery().processInstanceId(processInstance.getProcessInstanceId()).orderByHistoricActivityInstanceStartTime().desc().list();
+            //获取最新任务ID,防止时间错乱
+            String taskId = "startEvent".equals(haiList.get(0).getActivityType()) ? haiList.get(1).getTaskId() : haiList.get(0).getTaskId();
+            System.out.println(taskId);
             //获取任务
             Task task = taskService.createTaskQuery().processDefinitionKey(processKey).taskId(taskId).taskAssignee(assignee).singleResult();
             //添加备注 addComment(taskId,processInstanceId,message)
+            System.out.println(task.getId());
+            System.out.println(task.getProcessInstanceId());
+            System.out.println(comment);
             taskService.addComment(task.getId(), task.getProcessInstanceId(), comment);
             //完成任务
             taskService.complete(task.getId(), variables);
@@ -344,10 +310,7 @@ public class LeaveController {
         Map<String, Object> map = new HashMap<>();
         map.put("isSucceed", isSucceed);
         try {
-            Task task = taskService.createTaskQuery()
-                    .taskId(processVO.getTaskId())
-                    .taskAssignee(processVO.getAssignee())
-                    .singleResult();
+            Task task = taskService.createTaskQuery().taskId(processVO.getTaskId()).taskAssignee(processVO.getAssignee()).singleResult();
             taskService.addComment(task.getId(), task.getProcessInstanceId(), processVO.getComment());
             taskService.complete(processVO.getTaskId(), map);
         } catch (Exception e) {
