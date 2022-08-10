@@ -172,13 +172,9 @@ public class LeaveController {
             List<HistoricActivityInstance> haiList = historyService.createHistoricActivityInstanceQuery().processInstanceId(processInstance.getProcessInstanceId()).orderByHistoricActivityInstanceStartTime().desc().list();
             //获取最新任务ID,防止时间错乱
             String taskId = "startEvent".equals(haiList.get(0).getActivityType()) ? haiList.get(1).getTaskId() : haiList.get(0).getTaskId();
-            System.out.println(taskId);
             //获取任务
             Task task = taskService.createTaskQuery().processDefinitionKey(processKey).taskId(taskId).taskAssignee(assignee).singleResult();
             //添加备注 addComment(taskId,processInstanceId,message)
-            System.out.println(task.getId());
-            System.out.println(task.getProcessInstanceId());
-            System.out.println(comment);
             taskService.addComment(task.getId(), task.getProcessInstanceId(), comment);
             //完成任务
             taskService.complete(task.getId(), variables);
