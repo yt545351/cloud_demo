@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.system.entity.Proclamation;
 import com.example.system.vo.QueryProclamationVO;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * <p>
  * 服务类
@@ -23,4 +25,6 @@ public interface ProclamationService extends IService<Proclamation> {
     Object getOne();
 
     Object deleteProclamation(Proclamation proclamation);
+
+    void exportExcel(QueryProclamationVO queryVO, HttpServletResponse response);
 }

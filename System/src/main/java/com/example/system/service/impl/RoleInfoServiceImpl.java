@@ -6,7 +6,8 @@ import com.example.system.entity.PageBean;
 import com.example.system.entity.RoleInfo;
 import com.example.system.mapper.RoleInfoMapper;
 import com.example.system.service.RoleInfoService;
-import com.example.system.utils.StringUtils;
+import com.example.system.tool.ResultTools;
+import com.example.system.tool.StringTools;
 import com.example.system.vo.QueryRoleInfoVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.example.system.utils.ResultUtils.resultMap;
 
 /**
  * <p>
@@ -49,12 +49,12 @@ public class RoleInfoServiceImpl extends ServiceImpl<RoleInfoMapper, RoleInfo> i
         roleInfo.setCreate_time(now);
         roleInfo.setUpdate_time(now);
         int i = roleInfoMapper.insert(roleInfo);
-        return i > 0 ? resultMap(true, "新增成功") : resultMap(false, "新增失败");
+        return i > 0 ? ResultTools.resultMap(true, "新增成功") : ResultTools.resultMap(false, "新增失败");
     }
 
     @Override
     public Object getRoleList(QueryRoleInfoVO queryVO) {
-        List<RoleInfo> list = roleInfoMapper.selectList(new QueryWrapper<RoleInfo>().ge(StringUtils.isNotEmpty(queryVO.getStart_time()), "create_time", queryVO.getStart_time()).le(StringUtils.isNotEmpty(queryVO.getEnd_time()), "create_time", queryVO.getEnd_time()).like(StringUtils.isNotEmpty(queryVO.getRole_name()), "role_name", queryVO.getRole_name()).orderByDesc("create_time"));
+        List<RoleInfo> list = roleInfoMapper.selectList(new QueryWrapper<RoleInfo>().ge(StringTools.isNotEmpty(queryVO.getStart_time()), "create_time", queryVO.getStart_time()).le(StringTools.isNotEmpty(queryVO.getEnd_time()), "create_time", queryVO.getEnd_time()).like(StringTools.isNotEmpty(queryVO.getRole_name()), "role_name", queryVO.getRole_name()).orderByDesc("create_time"));
         if (queryVO.getPageNum() == null || queryVO.getPageNum() == 0) {
             return list;
         } else {
@@ -66,7 +66,7 @@ public class RoleInfoServiceImpl extends ServiceImpl<RoleInfoMapper, RoleInfo> i
     @Override
     public Object deleteRole(RoleInfo roleInfo) {
         int i = roleInfoMapper.deleteById(roleInfo);
-        return i > 0 ? resultMap(true, "删除成功") : resultMap(false, "删除失败");
+        return i > 0 ? ResultTools.resultMap(true, "删除成功") : ResultTools.resultMap(false, "删除失败");
     }
 
     @Override
@@ -75,6 +75,6 @@ public class RoleInfoServiceImpl extends ServiceImpl<RoleInfoMapper, RoleInfo> i
         roleInfo.setCreate_time(one.getCreate_time());
         roleInfo.setUpdate_time(LocalDateTime.now());
         int i = roleInfoMapper.updateById(roleInfo);
-        return i > 0 ? resultMap(true, "更新成功") : resultMap(false, "更新失败");
+        return i > 0 ? ResultTools.resultMap(true, "更新成功") : ResultTools.resultMap(false, "更新失败");
     }
 }

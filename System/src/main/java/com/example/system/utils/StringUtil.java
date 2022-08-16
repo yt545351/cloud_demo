@@ -11,15 +11,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class StringUtil {
     public static void main(String[] args) {
-        telEncrypt();
+
     }
 
     /**
-     * 号码截取加密
+     * 电话加密
+     *
+     * @param phoneNumber 电话号码
+     * @return {@link String}
      */
-    public static void telEncrypt() {
-        String ss = "15708447219";
-        String s = ss.substring(0, 3) + "****" + ss.substring(7, 11);
-        log.info("{}", s);
+    public static String telEncrypt(String phoneNumber) {
+        return phoneNumber.substring(0, 3) + "****" + phoneNumber.substring(7, 11);
     }
 }

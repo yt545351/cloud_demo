@@ -8,9 +8,10 @@ import com.example.system.entity.UserInfo;
 import com.example.system.mapper.RoleInfoMapper;
 import com.example.system.mapper.UserInfoMapper;
 import com.example.system.service.UserInfoService;
+import com.example.system.tool.ResultTools;
+import com.example.system.tool.StringTools;
 import com.example.system.utils.EncryptAesUtil;
 import com.example.system.utils.RedisUtil;
-import com.example.system.utils.StringUtils;
 import com.example.system.vo.LoginVO;
 import com.example.system.vo.QueryUserInfoVO;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static com.example.system.utils.ResultUtils.resultMap;
 
 /**
  * <p>
@@ -51,7 +51,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
                 .eq("username", loginVo.getUsername()));
         //判断该账号是否存在
         if (userInfo == null) {
-            return resultMap(false, "该账号尚未被注册,请注册账号");
+            return ResultTools.resultMap(false, "该账号尚未被注册,请注册账号");
         }
 
         String loginPassword = EncryptAesUtil.aesDecrypt(loginVo.getPassword());
@@ -66,7 +66,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
         //判断是否账号锁定
         if (loginLockValue != null) {
-            return resultMap(false, "该账号已被锁定，请30秒后再试");
+            return ResultTools.resultMap(false, "该账号已被锁定，请30秒后再试");
         } else {
             if (redisUtil.get(loginFailedNumKey) != null && (int) redisUtil.get(loginFailedNumKey) == 3) {
                 redisUtil.delete(loginFailedNumKey);
@@ -76,12 +76,12 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         if (sqlPassword.equals(loginPassword)) {
             //登陆成功后删除登陆失败次数
             redisUtil.delete(loginFailedNumKey);
-            return resultMap(true, "登陆成功");
+            return ResultTools.resultMap(true, "登陆成功");
         } else {
             Object loginFailedNumValue = redisUtil.get(loginFailedNumKey);
             if (loginFailedNumValue == null) {
                 redisUtil.set(loginFailedNumKey, 1);
-                return resultMap(false, "密码错误1次,登陆失败");
+                return ResultTools.resultMap(false, "密码错误1次,登陆失败");
             } else {
                 int loginFailedNum = (int) loginFailedNumValue;
                 loginFailedNum++;
@@ -90,10 +90,10 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
                     //设置账号锁定超时时间
                     redisUtil.setTimeOut(loginLockKey, 1, 15, TimeUnit.SECONDS);
                     redisUtil.update(loginFailedNumKey, loginFailedNum);
-                    return resultMap(false, "密码错误" + loginFailedNum + "次,锁定账号");
+                    return ResultTools.resultMap(false, "密码错误" + loginFailedNum + "次,锁定账号");
                 } else {
                     redisUtil.update(loginFailedNumKey, loginFailedNum);
-                    return resultMap(false, "密码错误" + loginFailedNum + "次,登陆失败");
+                    return ResultTools.resultMap(false, "密码错误" + loginFailedNum + "次,登陆失败");
                 }
             }
         }
@@ -105,7 +105,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         UserInfo user = userInfoMapper.selectOne(new QueryWrapper<UserInfo>()
                 .eq("username", userInfo.getUsername()));
         if (user != null) {
-            return resultMap(false, "已有该账户");
+            return ResultTools.resultMap(false, "已有该账户");
         }
         //AES加密
         String password = EncryptAesUtil.aesEncrypt(userInfo.getPassword());
@@ -115,15 +115,15 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         userInfo.setCreate_time(now);
         userInfo.setUpdate_time(now);
         int i = userInfoMapper.insert(userInfo);
-        return i > 0 ? resultMap(true, "新增成功") : resultMap(false, "新增失败");
+        return i > 0 ? ResultTools.resultMap(true, "新增成功") : ResultTools.resultMap(false, "新增失败");
     }
 
     @Override
     public Object getUserInfoList(QueryUserInfoVO queryVO) {
         List<UserInfo> list = userInfoMapper.selectList(new QueryWrapper<UserInfo>()
                 .select("id,create_time,role_id,tell,update_time,username")
-                .eq(StringUtils.isNotEmpty(queryVO.getUsername()), "username", queryVO.getUsername())
-                .eq(StringUtils.isNotEmpty(queryVO.getRole_id()), "role_id", queryVO.getRole_id())
+                .eq(StringTools.isNotEmpty(queryVO.getUsername()), "username", queryVO.getUsername())
+                .eq(StringTools.isNotEmpty(queryVO.getRole_id()), "role_id", queryVO.getRole_id())
                 .orderByDesc("create_time"));
         PageBean<UserInfo> pageBean = new PageBean<>(list, queryVO.getPageNum(), queryVO.getPageSize());
 //        List<Map<String, Object>> maps = userInfoMapper.queryUserList(queryVO);
@@ -151,12 +151,12 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             userInfo.setPassword(EncryptAesUtil.aesEncrypt(userInfo.getPassword()));
         }
         int i = userInfoMapper.updateById(userInfo);
-        return i > 0 ? resultMap(true, "更新成功") : resultMap(false, "更新失败");
+        return i > 0 ? ResultTools.resultMap(true, "更新成功") : ResultTools.resultMap(false, "更新失败");
     }
 
     @Override
     public Object deleteUser(UserInfo userInfo) {
         int i = userInfoMapper.deleteById(userInfo);
-        return i > 0 ? resultMap(true, "删除成功") : resultMap(false, "删除失败");
+        return i > 0 ? ResultTools.resultMap(true, "删除成功") : ResultTools.resultMap(false, "删除失败");
     }
 }

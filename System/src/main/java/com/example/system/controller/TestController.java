@@ -2,9 +2,11 @@ package com.example.system.controller;
 
 import com.example.system.entity.Proclamation;
 import com.example.system.service.TestService;
+import com.example.system.utils.SystemInfoUtil;
 import com.example.system.vo.ResultBody;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,7 @@ import java.net.UnknownHostException;
 
 @Api("测试接口")
 @RestController
+@Slf4j
 public class TestController {
 
     @Autowired

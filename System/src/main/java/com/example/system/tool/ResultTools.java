@@ -1,16 +1,15 @@
-package com.example.system.utils;
+package com.example.system.tool;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 返回工具
+ * 返回结果工具
  *
  * @author laughlook
- * @date 2022/07/21
+ * @date 2022/08/12
  */
-public class ResultUtils {
-
+public class ResultTools {
     /**
      * 返回Map
      *

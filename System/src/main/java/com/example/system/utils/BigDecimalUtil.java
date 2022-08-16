@@ -29,7 +29,8 @@ public class BigDecimalUtil {
         BigDecimal a = new BigDecimal(50);
         BigDecimal b = new BigDecimal(3);
         //四舍五入,保留2位小数
-        BigDecimal divide = a.divide(b, 2, RoundingMode.HALF_UP);
+        BigDecimal divide = a.divide(b, 2, BigDecimal.ROUND_HALF_UP);
+
         log.info("{}", divide);
     }
 

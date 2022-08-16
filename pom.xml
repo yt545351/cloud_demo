@@ -8,6 +8,7 @@
         <module>Log</module>
         <module>System</module>
         <module>Activiti</module>
+        <module>Tools</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

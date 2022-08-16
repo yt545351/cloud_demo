@@ -2,6 +2,7 @@ package com.example.system.controller;
 
 import com.example.system.entity.UserInfo;
 import com.example.system.service.UserInfoService;
+import com.example.system.utils.SystemInfoUtil;
 import com.example.system.vo.LoginVO;
 import com.example.system.vo.QueryUserInfoVO;
 import com.example.system.vo.ResultBody;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p>

@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * <p>
  * 前端控制器
@@ -56,5 +58,11 @@ public class ProclamationController {
     @RequestMapping(value = "/getList", method = RequestMethod.POST)
     public Object getProclamationList(@RequestBody QueryProclamationVO queryVO) {
         return new ResultBody<>(proclamationService.getProclamationList(queryVO));
+    }
+
+    @ApiOperation(value = "导出列表")
+    @RequestMapping(value = "/exportExcel", method = RequestMethod.POST)
+    public void exportExcel(@RequestBody QueryProclamationVO queryVO, HttpServletResponse response) {
+        proclamationService.exportExcel(queryVO, response);
     }
 }

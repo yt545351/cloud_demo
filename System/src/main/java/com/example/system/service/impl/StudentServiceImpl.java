@@ -6,14 +6,13 @@ import com.example.system.entity.PageBean;
 import com.example.system.entity.Student;
 import com.example.system.mapper.StudentMapper;
 import com.example.system.service.StudentService;
-import com.example.system.utils.StringUtils;
+import com.example.system.tool.ResultTools;
+import com.example.system.tool.StringTools;
 import com.example.system.vo.QueryStudentVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-
-import static com.example.system.utils.ResultUtils.resultMap;
 
 /**
  * <p>
@@ -31,7 +30,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
     @Override
     public Object getStudentInfo(QueryStudentVO queryVo) {
         QueryWrapper<Student> queryWrapper = new QueryWrapper<Student>()
-                .like(!StringUtils.isEmpty(queryVo.getName()), "name", queryVo.getName())
+                .like(!StringTools.isEmpty(queryVo.getName()), "name", queryVo.getName())
                 .eq(queryVo.getGrade() != null, "grade", queryVo.getGrade())
                 .eq(queryVo.getClass_name() != null, "class_name", queryVo.getClass_name());
         List<Student> list = studentMapper.selectList(queryWrapper);
@@ -84,12 +83,12 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
     @Override
     public Object updateStudentInfo(Student student) {
         int i = studentMapper.updateById(student);
-        return i > 0 ? resultMap(true, "更新成功") : resultMap(false, "更新失败");
+        return i > 0 ? ResultTools.resultMap(true, "更新成功") : ResultTools.resultMap(false, "更新失败");
     }
 
     @Override
     public Object deleteStudentInfo(Student student) {
         int i = studentMapper.deleteById(student.getId());
-        return i > 0 ? resultMap(true, "删除成功") : resultMap(false, "删除失败");
+        return i > 0 ? ResultTools.resultMap(true, "删除成功") : ResultTools.resultMap(false, "删除失败");
     }
 }

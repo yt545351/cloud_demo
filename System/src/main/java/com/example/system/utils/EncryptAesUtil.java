@@ -1,5 +1,6 @@
 package com.example.system.utils;
 
+import com.example.system.tool.StringTools;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 
@@ -51,7 +52,7 @@ public class EncryptAesUtil {
      */
     public static String aesEncrypt(String content) {
         try {
-            if (StringUtils.isEmpty(content)) {
+            if (StringTools.isEmpty(content)) {
                 return null;
             }
             // 初始化为加密模式的密码器
@@ -82,7 +83,7 @@ public class EncryptAesUtil {
      */
     public static String aesDecrypt(String encryptStr) {
         try {
-            if (StringUtils.isEmpty(encryptStr)) {
+            if (StringTools.isEmpty(encryptStr)) {
                 return null;
             }
             // 初始化为解密模式的密码器
