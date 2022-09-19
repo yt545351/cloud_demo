@@ -61,14 +61,14 @@ spring:
         min-idle: 2
     #连接超时时间（毫秒）
     timeout: 5000
-eureka:
-  instance:
-    prefer-ip-address: true
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://localhost:8000/eureka/
+#eureka:
+#  instance:
+#    prefer-ip-address: true
+#  client:
+#    register-with-eureka: true
+#    fetch-registry: true
+#    service-url:
+#      defaultZone: http://localhost:8000/eureka/
 logging:
   level:
     com.jt: info

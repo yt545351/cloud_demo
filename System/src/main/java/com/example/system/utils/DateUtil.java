@@ -23,6 +23,7 @@ public class DateUtil {
     static final String DTF = "yyyy-MM-dd HH:mm:ss";
 
     public static void main(String[] args) {
+//        nowToString();
 //        stringToString1();
 //        stringToString2();
 //        localDateTimeToString();
@@ -30,25 +31,35 @@ public class DateUtil {
 //        getFiveMinBefore();
 //        localDateTimeToWholeTime();
 //        getNowBefore12FiveMin();
-//        getEveryMonthFirstDayAndLastDay();
+        getEveryMonthFirstDayAndLastDay();
 //        stringToLocalDateTime();
-        getTime();
+
 
     }
-    public static void getTime(){
+
+    /**
+     * 当前时间转换String
+     */
+    public static void nowToString() {
         LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-        String format = dateTimeFormatter.format(now);
-        System.out.println(format);
+        DateTimeFormatter dtf1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter dtf3 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        String format1 = dtf1.format(now);
+        String format2 = dtf2.format(now);
+        String format3 = dtf3.format(now);
+        System.out.println(format1);
+        System.out.println(format2);
+        System.out.println(format3);
     }
 
     /**
      * String日期(yyyyMMdd)转换String日期(yyyy-MM-dd)
      */
     public static void stringToString1() {
-        String date = "20220509";
-        String time = date.substring(0, 4) + "-" + date.substring(4, 6) + "-" + date.substring(6, 8);
-        log.info("{}", time);
+        String startTime = "20220509";
+        String time = startTime.substring(0, 4) + "-" + startTime.substring(4, 6) + "-" + startTime.substring(6, 8);
+        System.out.println(time);
     }
 
     /**
@@ -56,19 +67,9 @@ public class DateUtil {
      */
     public static void stringToString2() {
         String startTime = "2022-04-01 23:59:59";
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern(DTF);
-        String t = LocalDateTime.parse(startTime, dtf).minusDays(1).toString().split("T")[0].replace("-", "");
-        log.info("日期:{}", t);
-    }
-
-    /**
-     * LocalDateTime转换字符串(yyyyMMdd)
-     */
-    public static void localDateTimeToString() {
-        LocalDateTime todayLocalDateTime = LocalDateTime.now();
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd");
-        String format = dtf.format(todayLocalDateTime);
-        log.info("{}", format);
+        String[] arr = startTime.split(" ")[0].split("-");
+        String time = arr[0] + arr[1] + arr[2];
+        System.out.println(time);
     }
 
     /**

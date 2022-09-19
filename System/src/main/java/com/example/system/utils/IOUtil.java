@@ -23,7 +23,8 @@ public class IOUtil {
 //        readFile1();
 //        readFile2();
 //        writeExcel();
-        readExcel();
+//        readExcel();
+        readFile();
     }
 
     @SneakyThrows
@@ -89,20 +90,30 @@ public class IOUtil {
             animal.setAge(5 + i);
             list.add(animal);
         }
-        EasyExcel.write(new FileOutputStream(new File("E:\\1.xls")))
-                .head(Animal.class)
-                .sheet("宠物列表")
-                .doWrite(list);
+        EasyExcel.write(new FileOutputStream(new File("E:\\1.xls"))).head(Animal.class).sheet("宠物列表").doWrite(list);
     }
 
     @SneakyThrows
     public static void readExcel() {
-        List<Object> objects = EasyExcel.read(new FileInputStream(new File("E:\\1.xls")))
-                .head(Animal.class)
-                .doReadAllSync();
+        List<Object> objects = EasyExcel.read(new FileInputStream(new File("E:\\1.xls"))).head(Animal.class).doReadAllSync();
         for (Object object : objects) {
             System.out.println(object);
         }
+
+    }
+
+
+    @SneakyThrows
+    public static void readFile() {
+        BufferedReader br = new BufferedReader(new FileReader("E:\\a.txt"));
+        BufferedWriter bw = new BufferedWriter(new FileWriter("E:\\b.txt"));
+        String ss = null;
+        while ((ss = br.readLine()) != null) {
+            bw.write(ss);
+            bw.newLine();
+        }
+        br.close();
+        bw.close();
 
     }
 }

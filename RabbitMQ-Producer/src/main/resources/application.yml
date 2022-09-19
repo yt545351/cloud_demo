@@ -1,0 +1,13 @@
+server:
+  port: 8087
+spring:
+  application:
+    name: RabbitMQ-Producer
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+
+
+

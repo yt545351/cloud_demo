@@ -9,6 +9,8 @@
         <module>System</module>
         <module>Activiti</module>
         <module>Tools</module>
+        <module>RabbitMQ-Producer</module>
+        <module>RabbitMQ-Consumer</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

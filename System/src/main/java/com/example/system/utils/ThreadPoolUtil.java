@@ -18,10 +18,8 @@ import static java.util.concurrent.TimeUnit.NANOSECONDS;
  * @date 2022/08/12
  */
 public class ThreadPoolUtil {
-    static final int MAX_VALUE = 0x7fffffff;
-
     public static void main(String[] args) {
-        newCachedThreadPool(0, MAX_VALUE, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), new ThreadFactoryBuilder().setNameFormat("cached-thread-%d").build());
+        newCachedThreadPool(0, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(), new ThreadFactoryBuilder().setNameFormat("cached-thread-%d").build());
         newFixedThreadPool(5, 5, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(), new ThreadFactoryBuilder().setNameFormat("fixed-thread-%d").build());
         newSingleThreadPool(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(), new ThreadFactoryBuilder().setNameFormat("single-thread-%d").build());
         newScheduledThreadPool(5, new ThreadFactoryBuilder().setNameFormat("scheduled-thread-%d").build());
@@ -40,7 +38,7 @@ public class ThreadPoolUtil {
     public static List<Integer> newCachedThreadPool(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, SynchronousQueue<Runnable> workQueue, ThreadFactory factory) {
         ThreadPoolExecutor executor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, factory);
         List<Integer> list = Collections.synchronizedList(new ArrayList<>());
-        for (int i = 1; i <= 100000; i++) {
+        for (int i = 1; i <= 1000; i++) {
             int index = i;
             executor.execute(new Runnable() {
                 @SneakyThrows
@@ -59,6 +57,7 @@ public class ThreadPoolUtil {
             }
             Thread.sleep(1000);
         }
+        System.out.println(list.size());
         return list;
     }
 
@@ -95,6 +94,7 @@ public class ThreadPoolUtil {
             }
             Thread.sleep(1000);
         }
+        System.out.println(list.size());
         return list;
     }
 
