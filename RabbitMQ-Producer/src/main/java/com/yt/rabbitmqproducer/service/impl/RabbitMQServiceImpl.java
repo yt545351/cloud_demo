@@ -46,6 +46,19 @@ public class RabbitMQServiceImpl implements RabbitMQService {
 
     }
 
+    @Override
+    public Object sendMsgTopic(MessageVO messageVO) {
+        Map<String, Object> map = getMessage(messageVO.getMessage());
+        String routingKey = messageVO.getRoutingKey();
+        try {
+            rabbitTemplate.convertAndSend(RabbitMQConfig.TOPIC_EXCHANGE_DEMO_NAME, routingKey, map);
+            return "ok";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "error";
+        }
+    }
+
     private Map<String, Object> getMessage(String msg) {
         String msgId = UUID.randomUUID().toString().replace("-", "").substring(0, 32);
         String sendTime = sdf.format(new Date());

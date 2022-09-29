@@ -1,5 +1,6 @@
 package com.yt.rabbitmqconsumer.listener;
 
+
 import com.yt.rabbitmqconsumer.config.RabbitMQConfig;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
@@ -9,10 +10,10 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 @Component
-@RabbitListener(queuesToDeclare = @Queue(RabbitMQConfig.FANOUT_EXCHANGE_QUEUE_TOPIC_B))
-public class FanoutExchangeConsumerB {
+@RabbitListener(queuesToDeclare = @Queue(RabbitMQConfig.RABBITMQ_DEMO_TOPIC))
+public class DirectExchangeConsumer {
     @RabbitHandler
-    private void process(Map<String, Object> map) {
-        System.out.println("队列B收到消息:" + map.toString());
+    private void process(Map map) {
+        System.out.println("消费者从服务端消费消息：" + map.toString());
     }
 }

@@ -29,4 +29,9 @@ public class RabbitMQController {
     public Object sendMsgFanout(@RequestBody MessageVO messageVO) {
         return new ResultBody<>(rabbitMQService.sendMsgFanout(messageVO));
     }
+    @ApiOperation(value = "发送消息Topic")
+    @RequestMapping(value = "/sendMsgTopic", method = RequestMethod.POST)
+    public Object sendMsgTopic(@RequestBody MessageVO messageVO) {
+        return new ResultBody<>(rabbitMQService.sendMsgTopic(messageVO));
+    }
 }

@@ -26,6 +26,7 @@ import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.client.indices.CreateIndexResponse;
 import org.elasticsearch.client.indices.GetIndexRequest;
 import org.elasticsearch.client.indices.GetIndexResponse;
+import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.unit.Fuzziness;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.*;
@@ -54,16 +55,16 @@ public class EsUtil {
     @SneakyThrows
     public static void main(String[] args) {
         RestHighLevelClient client = new RestHighLevelClient(RestClient.builder(new HttpHost("localhost", 9200, "http")));
-        createRequest(client);
-//        getRequest(client);
-//        deleteRequest(client);
 //        createIndex(client);
-//        updateIndex(client);
 //        getIndex(client);
 //        deleteIndex(client);
-//        bulkCreateIndex(client);
-//        bulkDeleteIndex(client);
-//        searchIndex(client);
+//        createDoc(client);
+//        updateDoc(client);
+//        getDoc(client);
+//        deleteDoc(client);
+//        bulkCreateDoc(client);
+//        bulkDeleteDoc(client);
+        searchIndex(client);
 //        searchHighLight(client);
 //        searchAggregation(client);
 //        searchGroup(client);
@@ -76,7 +77,7 @@ public class EsUtil {
      * @param client 客户端
      */
     @SneakyThrows
-    public static void createRequest(RestHighLevelClient client) {
+    public static void createIndex(RestHighLevelClient client) {
         CreateIndexRequest request = new CreateIndexRequest("user");
         CreateIndexResponse response = client.indices().create(request, RequestOptions.DEFAULT);
         boolean acknowledged = response.isAcknowledged();
@@ -90,7 +91,7 @@ public class EsUtil {
      * @param client 客户端
      */
     @SneakyThrows
-    public static void getRequest(RestHighLevelClient client) {
+    public static void getIndex(RestHighLevelClient client) {
         GetIndexRequest request = new GetIndexRequest("user");
         GetIndexResponse response = client.indices().get(request, RequestOptions.DEFAULT);
         log.info("aliases:{}", response.getAliases());
@@ -104,19 +105,19 @@ public class EsUtil {
      * @param client 客户端
      */
     @SneakyThrows
-    public static void deleteRequest(RestHighLevelClient client) {
+    public static void deleteIndex(RestHighLevelClient client) {
         DeleteIndexRequest request = new DeleteIndexRequest("user");
         AcknowledgedResponse response = client.indices().delete(request, RequestOptions.DEFAULT);
         log.info("操作结果:{}", response.isAcknowledged());
     }
 
     /**
-     * 新增文档
+     * 创建文档
      *
      * @param client 客户端
      */
     @SneakyThrows
-    public static void createIndex(RestHighLevelClient client) {
+    public static void createDoc(RestHighLevelClient client) {
         //请求对象
         IndexRequest request = new IndexRequest();
         //设置索引及唯一性标识
@@ -142,7 +143,7 @@ public class EsUtil {
      * @param client 客户端
      */
     @SneakyThrows
-    public static void updateIndex(RestHighLevelClient client) {
+    public static void updateDoc(RestHighLevelClient client) {
         //请求对象
         UpdateRequest request = new UpdateRequest();
         //配置修改参数
@@ -162,7 +163,7 @@ public class EsUtil {
      * @param client 客户端
      */
     @SneakyThrows
-    public static void getIndex(RestHighLevelClient client) {
+    public static void getDoc(RestHighLevelClient client) {
         //请求对象
         GetRequest request = new GetRequest().index("user").id("1001");
         //客户端发送请求，获取响应对象
@@ -179,7 +180,7 @@ public class EsUtil {
      * @param client 客户端
      */
     @SneakyThrows
-    public static void deleteIndex(RestHighLevelClient client) {
+    public static void deleteDoc(RestHighLevelClient client) {
         //请求对象
         DeleteRequest request = new DeleteRequest().index("user").id("1001");
         DeleteResponse response = client.delete(request, RequestOptions.DEFAULT);
@@ -187,12 +188,12 @@ public class EsUtil {
     }
 
     /**
-     * 批量新增
+     * 批量新增文档
      *
      * @param client 客户端
      */
     @SneakyThrows
-    public static void bulkCreateIndex(RestHighLevelClient client) {
+    public static void bulkCreateDoc(RestHighLevelClient client) {
         BulkRequest request = new BulkRequest();
         request.add(new IndexRequest().index("user").id("1001").source(XContentType.JSON, "name", "张三", "age", 20, "sex", "男"));
         request.add(new IndexRequest().index("user").id("1002").source(XContentType.JSON, "name", "李四", "age", 30, "sex", "女"));
@@ -204,12 +205,12 @@ public class EsUtil {
     }
 
     /**
-     * 批量删除
+     * 批量删除文档
      *
      * @param client 客户端
      */
     @SneakyThrows
-    public static void bulkDeleteIndex(RestHighLevelClient client) {
+    public static void bulkDeleteDoc(RestHighLevelClient client) {
         BulkRequest request = new BulkRequest();
         request.add(new DeleteRequest().index("user").id("1001"));
         request.add(new DeleteRequest().index("user").id("1002"));
@@ -237,7 +238,7 @@ public class EsUtil {
         //关键字查询
 //        sourceBuilder = searchKeyword(new SearchSourceBuilder());
         //分页查询
-//        sourceBuilder = searchPag(new SearchSourceBuilder());
+        sourceBuilder = searchPag(new SearchSourceBuilder());
         //数据排序
 //        sourceBuilder = searchSort(new SearchSourceBuilder());
         //过滤字段
