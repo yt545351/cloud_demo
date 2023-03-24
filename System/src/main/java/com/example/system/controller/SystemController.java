@@ -22,7 +22,7 @@ public class SystemController {
     public RestTemplate restTemplate;
 
 //    @Autowired
-//    public SystemService systemService;
+    public SystemService systemService;
 
     @RequestMapping(value = "/query", method = RequestMethod.GET)
     public String query() {
@@ -31,7 +31,7 @@ public class SystemController {
         //RestTemplate
 //        result = restTemplate.getForObject(url, String.class);
         //Feign
-//        result = systemService.query("222222");
+        result = systemService.query("222222");
         return result;
     }
 }

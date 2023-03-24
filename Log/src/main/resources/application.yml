@@ -1,13 +1,31 @@
-server:
-  port: 8082
-spring:
-  application:
-    name: Log
-eureka:
-  instance:
-    prefer-ip-address: true
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://localhost:8000/eureka/
+#server:
+#  port: 8082
+#spring:
+#  application:
+#    name: log
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: localhost:8848
+#      config:
+#        server-addr: localhost:8848
+#        file-extension: properties
+#        group: DEFAULT_GROUP
+##        prefix: ${spring.application.name}
+#      server-addr: localhost:8848
+
+#nacos:
+#  config:
+#    server-addr: localhost:8848
+#eureka:
+#  instance:
+#    prefer-ip-address: true
+#  client:
+#    register-with-eureka: true
+#    fetch-registry: true
+#    service-url:
+#      defaultZone: http://localhost:8000/eureka/
+java:
+  name: "yt"
+  age:  "18"
+  sex: "男"

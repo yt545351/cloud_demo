@@ -131,6 +131,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.ffcs.4a.base</groupId>
+            <artifactId>base-sdk-sync-springboot</artifactId>
+            <version>1.0.1</version>
+        </dependency>
     </dependencies>
     <dependencyManagement>
         <dependencies>
