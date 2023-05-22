@@ -2,6 +2,7 @@ package com.example.system.service.impl;
 
 import com.example.system.mapper.TestMapper;
 import com.example.system.service.TestService;
+import com.example.system.utils.annotation.MyAnnotation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -22,6 +23,8 @@ public class TestServiceImpl implements TestService {
     static final String DTF1 = "yyyy-MM-dd HH:mm:ss";
     static final String DTF2 = "yyyyMMdd";
 
+    @MyAnnotation
+    private static String code;
 
     @Autowired
     private TestMapper testMapper;
@@ -34,5 +37,9 @@ public class TestServiceImpl implements TestService {
         String tableName = "school_info" + "_" + dateStr;
         int i = testMapper.createTable(tableName);
         return true;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(code);
     }
 }

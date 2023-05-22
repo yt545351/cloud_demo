@@ -132,9 +132,9 @@
             <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.ffcs.4a.base</groupId>
-            <artifactId>base-sdk-sync-springboot</artifactId>
-            <version>1.0.1</version>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-core</artifactId>
+            <version>5.3.8</version>
         </dependency>
     </dependencies>
     <dependencyManagement>

@@ -2,6 +2,7 @@ package com.example.system.controller;
 
 import com.example.system.entity.Proclamation;
 import com.example.system.service.TestService;
+import com.example.system.utils.DrawImageUtils;
 import com.example.system.utils.SystemInfoUtil;
 import com.example.system.vo.ResultBody;
 import io.swagger.annotations.Api;
@@ -15,7 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -62,4 +66,12 @@ public class TestController {
         }
     }
 
+    @ApiOperation(value = "获取Ip地址")
+    @RequestMapping(value = "/getCode", method = RequestMethod.GET)
+    public void getIp(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        DrawImageUtils d = new DrawImageUtils();
+        d.doGet(request, response);
+        String checkcode = request.getSession().getAttribute("checkcode").toString();
+        System.out.println(checkcode);
+    }
 }
